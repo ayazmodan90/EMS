@@ -19,14 +19,14 @@ public class EmployeeController {
     @GetMapping("/showRecords")
     public String showRecords(Model model) {
         model.addAttribute("listEmployees", service.getAllEmployees());
-        return "employee/showRecords";
+        return "admin/showRecords";
     }
 
     // Add Page
     @GetMapping("/addEmployee")
     public String addForm(Model model) {
         model.addAttribute("employee", new Employee());
-        return "employee/addEmployee";
+        return "admin/addEmployee";
     }
 
     // Save

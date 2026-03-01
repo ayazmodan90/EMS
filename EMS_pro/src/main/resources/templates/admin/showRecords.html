@@ -14,15 +14,81 @@ src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.min.css">
 
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+}
+
+.header{
+    background:white;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header h2{
+    margin:0;
+    color:#2a5298;
+}
+
+.add-btn{
+    padding:8px 15px;
+    background:#2a5298;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+    transition:0.3s;
+}
+
+.add-btn:hover{
+    background:#1e3c72;
+}
+
+.container{
+    margin:40px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+table.dataTable thead{
+    background:#2a5298;
+    color:white;
+}
+
+.edit-link{
+    color:#2a5298;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.edit-link:hover{
+    text-decoration:underline;
+}
+
+.delete-link{
+    color:red;
+    font-weight:bold;
+    text-decoration:none;
+    cursor:pointer;
+}
+</style>
+
 </head>
 
 <body>
 
-<h2>Employee List</h2>
+<div class="header">
+    <h2>Employee Management</h2>
+    <a class="add-btn" th:href="@{/addEmployee}">+ Add New Employee</a>
+</div>
 
-<a th:href="@{/addEmployee}">Add New Employee</a>
-
-<br><br>
+<div class="container">
 
 <table id="employeeTable" class="display">
 <thead>
@@ -42,11 +108,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.23.0/sweetalert2.min
 <td th:text="${emp.lastName}"></td>
 <td th:text="${emp.email}"></td>
 <td>
-<a th:href="@{/showFormForUpdate/{id}(id=${emp.id})}">Edit</a> |
-<a href="#" th:onclick="|confirmDelete(${emp.id})|">Delete</a>
+<a class="edit-link" th:href="@{/showFormForUpdate/{id}(id=${emp.id})}">Edit</a> |
+<a class="delete-link" href="#" th:onclick="|confirmDelete(${emp.id})|">Delete</a>
+</td>
 </tr>
 </tbody>
 </table>
+
+</div>
 
 <script>
 $(document).ready(function () {

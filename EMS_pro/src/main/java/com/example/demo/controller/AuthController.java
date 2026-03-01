@@ -15,12 +15,6 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-
-    @GetMapping("/")
-    public String showIndexPage() {
-        return "index";
-    }
-
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("user", new User());
@@ -28,15 +22,19 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user) {
+    public String registerUser(@ModelAttribute("user") User user,
+                               Model model) {
 
         User existingUser = userService.findByEmail(user.getEmail());
 
         if (existingUser != null) {
-            return "redirect:/register?error";
+            model.addAttribute("error", "Email already exists!");
+            return "auth/register";
         }
 
+        user.setRole("USER");  // default role
         userService.saveUser(user);
+
         return "redirect:/login";
     }
 
@@ -45,8 +43,9 @@ public class AuthController {
         model.addAttribute("user", new User());
         return "auth/login";
     }
+
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute("user") User user,
+    public String loginUser(@ModelAttribute User user,
                             HttpSession session,
                             Model model) {
 
@@ -56,15 +55,25 @@ public class AuthController {
                 existingUser.getPassword().equals(user.getPassword())) {
 
             session.setAttribute("loggedInUser", existingUser);
-            return "redirect:/dashboard";
+
+            if ("ADMIN".equals(existingUser.getRole())) {
+                return "redirect:/admin/dashboard";
+            } else {
+                return "redirect:/dashboard";
+            }
         }
 
-        model.addAttribute("error", "Invalid Email or Password");
+        model.addAttribute("error", "Invalid Credentials");
         return "auth/login";
     }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
-        return "auth/dashboard";
+    public String userDashboard(HttpSession session) {
+
+        if (session.getAttribute("loggedInUser") == null) {
+            return "redirect:/login";
+        }
+
+        return "admin/dashboard";
     }
 }

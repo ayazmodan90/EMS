@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Add Employee</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        background: white;
+        padding: 40px;
+        width: 400px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #2a5298;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        transition: 0.3s;
+    }
+
+    input:focus {
+        border-color: #2a5298;
+        outline: none;
+        box-shadow: 0 0 5px rgba(42,82,152,0.5);
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background: #2a5298;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #1e3c72;
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        text-decoration: none;
+        color: #2a5298;
+        font-weight: bold;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2 th:text="${employee.id == null} ? 'Add Employee' : 'Update Employee'"></h2>
+
+<form th:action="@{/saveEmployee}" th:object="${employee}" method="post">
+
+<input type="hidden" th:field="*{id}" />
+
+<label>First Name</label>
+<input type="text" th:field="*{firstName}" required>
+
+<label>Last Name</label>
+<input type="text" th:field="*{lastName}" required>
+
+<label>Email</label>
+<input type="email" th:field="*{email}" required>
+
+<button type="submit">Save</button>
+
+</form>
+
+<a class="back-link" th:href="@{/showRecords}">← Back to List</a>
+
+</div>
+
+</body>
+</html>

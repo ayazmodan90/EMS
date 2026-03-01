@@ -2,15 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Employee;
 import com.example.demo.service.EmployeeService;
-
-import java.security.Provider.Service;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/employees")
 public class EmployeeController {
 
     private final EmployeeService service;
@@ -19,27 +15,42 @@ public class EmployeeController {
         this.service = service;
     }
 
-    @GetMapping
-    public String listEmployees(Model model) {
-        model.addAttribute("employees", service.getAllEmployees());
-        return "employee/list";
+    // Show Records
+    @GetMapping("/showRecords")
+    public String showRecords(Model model) {
+        model.addAttribute("listEmployees", service.getAllEmployees());
+        return "employee/showRecords";
     }
 
-    @GetMapping("/add")
-    public String addEmployeeForm(Model model) {
+    // Add Page
+    @GetMapping("/addEmployee")
+    public String addForm(Model model) {
         model.addAttribute("employee", new Employee());
-        return "employee/add";
+        return "employee/addEmployee";
     }
 
-    @PostMapping("/save")
+    // Save
+    @PostMapping("/saveEmployee")
     public String saveEmployee(@ModelAttribute Employee employee) {
         service.saveEmployee(employee);
-        return "redirect:/employees";
+        return "redirect:/showRecords";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
-        service.deleteEmployee(id);
-        return "redirect:/employees";
+    // Edit
+    @GetMapping("/showFormForUpdate/{id}")
+    public String updateForm(@PathVariable Long id, Model model) {
+
+        Employee employee = service.getEmployeeById(id);
+        model.addAttribute("employee", employee);
+
+        return "employee/addEmployee";
     }
+
+    // Delete
+    @GetMapping("/deleteEmployee/{id}")
+    public String delete(@PathVariable Long id) {
+        service.deleteEmployee(id);
+        return "redirect:/showRecords";
+    }
+    
 }

@@ -15,14 +15,23 @@ public class EmployeeService {
         this.repository = repository;
     }
 
+    // Save
     public void saveEmployee(Employee employee) {
         repository.save(employee);
     }
 
+    // Get All
     public List<Employee> getAllEmployees() {
         return repository.findAll();
     }
 
+    // Get By Id  👈 ADD THIS
+    public Employee getEmployeeById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    }
+
+    // Delete
     public void deleteEmployee(Long id) {
         repository.deleteById(id);
     }
